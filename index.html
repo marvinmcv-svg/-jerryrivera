@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Jerry Rivera — El Bebé de la Salsa · Sitio Oficial</title>
+  <meta name="description" content="Sitio oficial de Jerry Rivera, el Bebé de la Salsa. Nuevo lanzamiento: Mi Isla del Encanto. Música, videos, discografía, giras y más." />
+  <meta name="theme-color" content="#0b0505" />
+  <meta property="og:title" content="Jerry Rivera — Sitio Oficial" />
+  <meta property="og:description" content="Mi Isla del Encanto — disponible ya." />
+  <meta property="og:image" content="/img/mi-isla.webp" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter+Tight:wght@300;400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="/img/avatar.webp" />
+</head>
+<body class="is-loading">
+  <!-- ============ CURTAIN PRELOADER ============ -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__curtain loader__curtain--l"></div>
+    <div class="loader__curtain loader__curtain--r"></div>
+    <div class="loader__center">
+      <p class="loader__eyebrow" data-en="Ladies and gentlemen…">Damas y caballeros…</p>
+      <p class="loader__script">Jerry Rivera</p>
+      <div class="loader__bar"><span></span></div>
+      <p class="loader__count"><span class="js-count">0</span>%</p>
+    </div>
+  </div>
+
+  <canvas class="gl" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <a href="#top" class="nav__logo" aria-label="Jerry Rivera — inicio">
+      <span class="nav__mono">JR</span>
+      <span class="nav__name">Jerry Rivera</span>
+    </a>
+    <nav class="nav__links" aria-label="Principal">
+      <a href="#lanzamiento" data-en="New">Nuevo</a>
+      <a href="#historia" data-en="Story">Historia</a>
+      <a href="#discografia" data-en="Albums">Discografía</a>
+      <a href="#videos">Videos</a>
+      <a href="#gira" data-en="Live">En Vivo</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="lang" type="button" aria-label="Cambiar idioma / Switch language"><span class="lang__es is-on">ES</span><span class="lang__sep">/</span><span class="lang__en">EN</span></button>
+      <button class="listen magnetic" type="button" aria-expanded="false" aria-controls="player">
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span data-en="Listen">Escuchar</span>
+      </button>
+      <button class="burger" type="button" aria-label="Menú" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="menu" aria-hidden="true">
+    <nav class="menu__links">
+      <a href="#lanzamiento"><small>01</small><span data-en="New Release">Nuevo</span></a>
+      <a href="#historia"><small>02</small><span data-en="Story">Historia</span></a>
+      <a href="#discografia"><small>03</small><span data-en="Albums">Discografía</span></a>
+      <a href="#videos"><small>04</small><span>Videos</span></a>
+      <a href="#gira"><small>05</small><span data-en="Live">En Vivo</span></a>
+      <a href="#contacto"><small>06</small><span data-en="Contact">Contacto</span></a>
+    </nav>
+  </div>
+
+  <!-- Floating Spotify dock -->
+  <aside class="player" id="player" aria-label="Reproductor" aria-hidden="true">
+    <div class="player__head">
+      <span data-en="Now playing · Spotify">Sonando ahora · Spotify</span>
+      <button class="player__close" type="button" aria-label="Cerrar">×</button>
+    </div>
+    <div class="player__frame" data-src="https://open.spotify.com/embed/artist/7wOZy3KdFVVINgNFFxkxwO?utm_source=generator&theme=0"></div>
+  </aside>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero" data-cursor="">
+      <div class="hero__media">
+        <img src="/img/avatar.webp" alt="Retrato de Jerry Rivera frente a un telón de terciopelo rojo, con chaqueta negra bordada en oro" class="hero__img" />
+        <div class="hero__spot"></div>
+      </div>
+      <div class="hero__content">
+        <p class="hero__eyebrow"><span class="dot"></span><span data-en="Humacao, Puerto Rico · Since 1988">Humacao, Puerto Rico · Desde 1988</span></p>
+        <h1 class="hero__title" aria-label="Jerry Rivera">
+          <span class="line"><span class="split">Jerry</span></span>
+          <span class="line line--r"><span class="split">Rivera</span></span>
+        </h1>
+        <p class="hero__script">el Bebé de la Salsa</p>
+        <div class="hero__ctas">
+          <a href="#lanzamiento" class="btn btn--gold magnetic"><span data-en="Mi Isla del Encanto — Out now">Mi Isla del Encanto — Ya disponible</span><i class="btn__arrow">→</i></a>
+          <a href="#gira" class="btn btn--ghost magnetic"><span data-en="Mexico City · Nov 17">CDMX · 17 Nov</span></a>
+        </div>
+      </div>
+      <div class="hero__meta">
+        <div><b class="js-num" data-to="1972697" data-format="compact">0</b><span data-en="Instagram followers">Seguidores en Instagram</span></div>
+        <div><b>N.º 1</b><span data-en="Latin & Tropical charts">Billboard Latin &amp; Tropical</span></div>
+      </div>
+      <a href="#lanzamiento" class="hero__scroll" aria-label="Desplazar"><span data-en="Scroll">Desliza</span><i></i></a>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Salsa es destino y rumbo</span><em>✦</em><span>El Nuevo Orden Musical</span><em>✦</em><span>Mi Isla del Encanto</span><em>✦</em><span>La Vida con Jerry</span><em>✦</em>
+        <span>Salsa es destino y rumbo</span><em>✦</em><span>El Nuevo Orden Musical</span><em>✦</em><span>Mi Isla del Encanto</span><em>✦</em><span>La Vida con Jerry</span><em>✦</em>
+      </div>
+    </div>
+
+    <!-- ============ NEW RELEASE ============ -->
+    <section class="release" id="lanzamiento">
+      <div class="release__ghost" aria-hidden="true">
+        <div class="ghost-track"><span>Mi Isla del Encanto · Mi Isla del Encanto · Mi Isla del Encanto · </span><span>Mi Isla del Encanto · Mi Isla del Encanto · Mi Isla del Encanto · </span></div>
+      </div>
+      <div class="release__pin">
+        <div class="release__stage">
+          <div class="vinyl-wrap">
+            <div class="vinyl">
+              <div class="vinyl__grooves"></div>
+              <div class="vinyl__label" style="background-image:url(/img/mi-isla.webp)"></div>
+              <div class="vinyl__shine"></div>
+            </div>
+          </div>
+          <div class="sleeve tilt" data-cursor="Play">
+            <img src="/img/mi-isla.webp" alt="Portada de Mi Isla del Encanto" />
+            <div class="tilt__glare"></div>
+          </div>
+        </div>
+        <div class="release__copy">
+          <p class="kicker"><span class="kicker__line"></span><span data-en="New Release · 2026">Nuevo Lanzamiento · 2026</span></p>
+          <h2 class="release__title reveal-lines">Mi Isla<br /><em>del Encanto</em></h2>
+          <p class="release__text reveal" data-en="A song dedicated to his beautiful homeland, its roots and the pride every Puerto Rican carries in the heart. Part of <b>El Nuevo Orden Musical</b>.">Una canción dedicada a su hermosa tierra, sus raíces y ese orgullo que todo boricua lleva en el corazón. Parte de <b>El Nuevo Orden Musical</b>.</p>
+          <div class="release__actions reveal">
+            <a class="btn btn--gold magnetic" href="https://open.spotify.com/album/07DincC8rWgyGGAmt1JKV5" target="_blank" rel="noopener"><span data-en="Listen on Spotify">Escuchar en Spotify</span><i class="btn__arrow">↗</i></a>
+            <button class="btn btn--ghost magnetic js-video" data-yt="YJesqqfNh7Y" type="button"><span data-en="Watch visualizer">Ver visualizer</span><i class="btn__arrow">▶</i></button>
+          </div>
+          <div class="release__embed reveal">
+            <iframe title="Spotify: Mi Isla del Encanto" loading="lazy" data-src="https://open.spotify.com/embed/album/07DincC8rWgyGGAmt1JKV5?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="stats">
+      <div class="stat"><b class="js-num" data-to="38">0</b><span data-en="Years on stage">Años en escena</span></div>
+      <div class="stat"><b class="js-num" data-to="21">0</b><span data-en="Albums">Álbumes</span></div>
+      <div class="stat"><b class="js-num" data-to="10">0</b><span data-en="#1 hits on Billboard Tropical Airplay">Números 1 en Billboard Tropical Airplay</span></div>
+      <div class="stat"><b><span class="js-num" data-to="3">0</span>×</b><span data-en="Platinum · <i>Cuenta Conmigo</i>">Platino · <i>Cuenta Conmigo</i></span></div>
+    </section>
+
+    <!-- ============ QUOTE / LEGACY ============ -->
+    <section class="legacy">
+      <p class="legacy__eyebrow kicker"><span class="kicker__line"></span><span data-en="The legacy">El legado</span></p>
+      <p class="legacy__quote js-words" data-en="At 18, <em>Cuenta Conmigo</em> became the best-selling salsa album in history — breaking a record held by Willie Colón — and held #1 on the Latin Billboard for three straight months.">A los 18 años, <em>Cuenta Conmigo</em> se convirtió en el álbum de salsa más vendido de la historia — superando un récord de Willie Colón — y se mantuvo tres meses consecutivos en el N.º 1 de Billboard Latino.</p>
+      <div class="legacy__chips reveal">
+        <span data-en="2 Premios Lo Nuestro">2 Premios Lo Nuestro</span>
+        <span data-en="Latin Grammy nominee">Nominado al Latin Grammy</span>
+        <span data-en="3 Sony Crystal Awards">3 Premios Cristal de Sony</span>
+        <span data-en="Idol Puerto Rico judge">Juez de Idol Puerto Rico</span>
+      </div>
+    </section>
+
+    <!-- ============ HISTORIA (horizontal) ============ -->
+    <section class="story" id="historia">
+      <div class="story__head">
+        <p class="kicker"><span class="kicker__line"></span><span data-en="A life in salsa">Una vida en salsa</span></p>
+        <h2 class="section-title"><span data-en="The">La</span> <em data-en="Story">Historia</em></h2>
+      </div>
+      <div class="story__rail">
+        <div class="story__track">
+          <article class="chapter">
+            <span class="chapter__year">1973</span>
+            <h3 data-en="Born into music">Nace entre música</h3>
+            <p data-en="Gerardo Rivera Rodríguez is born on July 31 in Humacao, Puerto Rico, and grows up in Levittown, Toa Baja. His mother Dominga sings; his father Edwin leads <i>Los Barones Trio</i>.">Gerardo Rivera Rodríguez nace el 31 de julio en Humacao, Puerto Rico, y crece en Levittown, Toa Baja. Su madre Dominga canta; su padre Edwin dirige <i>Los Barones Trio</i>.</p>
+          </article>
+          <article class="chapter">
+            <span class="chapter__year">1986</span>
+            <h3 data-en="The photo with his idol">La foto con su ídolo</h3>
+            <p data-en="At 14, in a hotel in Isla Verde, Frankie Ruiz joins his father's trio on stage. The photo of that night would become an album cover 17 years later.">A los 14, en un hotel de Isla Verde, Frankie Ruiz sube a cantar con el trío de su padre. La foto de esa noche sería portada de un disco 17 años después.</p>
+          </article>
+          <article class="chapter">
+            <span class="chapter__year">1989</span>
+            <h3 data-en="El Bebé de la Salsa">El Bebé de la Salsa</h3>
+            <p data-en="Discovered by Tommy Olivencia and signed by CBS at 16. <i>Empezando a Vivir</i> and the hit <i>De La Cabeza A Los Pies</i> earn him his nickname.">Descubierto por Tommy Olivencia y firmado por CBS a los 16. <i>Empezando a Vivir</i> y el éxito <i>De La Cabeza A Los Pies</i> le dan su apodo.</p>
+          </article>
+          <article class="chapter chapter--big">
+            <span class="chapter__year">1992</span>
+            <h3>Cuenta Conmigo</h3>
+            <p data-en="Platinum in the US, Puerto Rico, Venezuela and Colombia. <i>Amores Como El Nuestro</i> becomes a classic — later sampled by Lord Tariq &amp; Peter Gunz and Wyclef Jean.">Platino en EE. UU., Puerto Rico, Venezuela y Colombia. <i>Amores Como El Nuestro</i> se vuelve un clásico — luego sampleado por Lord Tariq &amp; Peter Gunz y Wyclef Jean.</p>
+          </article>
+          <article class="chapter">
+            <span class="chapter__year">1998</span>
+            <h3 data-en="“Ese” goes #1">“Ese” llega al N.º 1</h3>
+            <p data-en="His first ballad record, <i>De Otra Manera</i>. The bolero <i>Ese</i> tops Hot Latin Songs — he sings it with his father at the Coliseo Roberto Clemente.">Su primer disco de baladas, <i>De Otra Manera</i>. El bolero <i>Ese</i> lidera Hot Latin Songs — lo canta junto a su padre en el Coliseo Roberto Clemente.</p>
+          </article>
+          <article class="chapter">
+            <span class="chapter__year">2001</span>
+            <h3>Quiero</h3>
+            <p data-en="A triple #1: Hot Latin Songs, Latin Pop and Tropical. Followed in 2002 by the anthem <i>Vuela Muy Alto</i>.">Triple N.º 1: Hot Latin Songs, Latin Pop y Tropical. En 2002 le sigue el himno <i>Vuela Muy Alto</i>.</p>
+          </article>
+          <article class="chapter">
+            <span class="chapter__year">2003</span>
+            <h3 data-en="Singing to his idol">Canto a mi Ídolo</h3>
+            <p data-en="A tribute to Frankie Ruiz with that 1986 photo on the cover. <i>Mi Libertad</i> feat. Voltio hits #1 and the album earns a Latin Grammy nomination.">Tributo a Frankie Ruiz con aquella foto de 1986 en la portada. <i>Mi Libertad</i> junto a Voltio llega al N.º 1 y el disco es nominado al Latin Grammy.</p>
+          </article>
+          <article class="chapter">
+            <span class="chapter__year">2011</span>
+            <h3 data-en="El Amor Existe">El Amor Existe</h3>
+            <p data-en="<i>Solo Pienso En Ti</i> and <i>Solo Con Un Beso</i> both reach #1 Tropical. He joins <i>Idol Puerto Rico</i> as a judge.">Tanto <i>Solo Pienso En Ti</i> como <i>Solo Con Un Beso</i> llegan al N.º 1 Tropical. Se une como juez a <i>Idol Puerto Rico</i>.</p>
+          </article>
+          <article class="chapter chapter--big chapter--now">
+            <span class="chapter__year">2026</span>
+            <h3>El Nuevo Orden Musical</h3>
+            <p data-en="Re-recording the songs that defined an era, alongside Isidro Infante — and releasing <i>Mi Isla del Encanto</i>, a love letter to Puerto Rico.">Regrabando los temas que marcaron una época junto a Isidro Infante — y lanzando <i>Mi Isla del Encanto</i>, una carta de amor a Puerto Rico.</p>
+          </article>
+        </div>
+      </div>
+      <div class="story__progress" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- ============ DISCOGRAFÍA (3D ring) ============ -->
+    <section class="disco" id="discografia">
+      <div class="disco__pin">
+        <div class="disco__head">
+          <p class="kicker"><span class="kicker__line"></span><span data-en="1989 — 2026">1989 — 2026</span></p>
+          <h2 class="section-title"><span data-en="The">La</span> <em data-en="Discography">Discografía</em></h2>
+        </div>
+        <div class="ring-scene">
+          <div class="ring"></div>
+        </div>
+        <div class="disco__info" aria-live="polite">
+          <span class="disco__year js-d-year">1989</span>
+          <h3 class="disco__name js-d-name">Empezando a Vivir</h3>
+          <p class="disco__label js-d-label">CBS / Sony Discos</p>
+          <ul class="disco__hits js-d-hits"></ul>
+        </div>
+        <div class="disco__nav">
+          <button class="disco__btn magnetic" data-dir="-1" type="button" aria-label="Álbum anterior">←</button>
+          <span class="disco__count"><b class="js-d-idx">01</b> / <span class="js-d-total">20</span></span>
+          <button class="disco__btn magnetic" data-dir="1" type="button" aria-label="Siguiente álbum">→</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LATEST SINGLES (3D tilt cards) ============ -->
+    <section class="singles">
+      <div class="singles__head">
+        <p class="kicker"><span class="kicker__line"></span><span data-en="Fresh off the press">Recién salido</span></p>
+        <h2 class="section-title"><span data-en="Latest">Lo más</span> <em data-en="Singles">Nuevo</em></h2>
+      </div>
+      <div class="singles__grid">
+        <a class="card3d tilt" href="https://open.spotify.com/album/07DincC8rWgyGGAmt1JKV5" target="_blank" rel="noopener" data-cursor="Play">
+          <div class="card3d__inner">
+            <img src="/img/mi-isla.webp" alt="Portada: Mi Isla del Encanto" loading="lazy" />
+            <div class="card3d__foil"></div>
+            <div class="tilt__glare"></div>
+          </div>
+          <div class="card3d__meta"><span>2026 · Single</span><h3>Mi Isla del Encanto</h3></div>
+        </a>
+        <a class="card3d tilt" href="https://open.spotify.com/track/6BsjRazN6JoCngYbE1KSje" target="_blank" rel="noopener" data-cursor="Play">
+          <div class="card3d__inner">
+            <img src="/img/salsa-destino.webp" alt="Portada: Salsa Es Destino Y Rumbo" loading="lazy" />
+            <div class="card3d__foil"></div>
+            <div class="tilt__glare"></div>
+          </div>
+          <div class="card3d__meta"><span>2026 · Single</span><h3>Salsa Es Destino Y Rumbo</h3></div>
+        </a>
+        <a class="card3d tilt" href="https://open.spotify.com/track/1CJ11DyYeirjnpbJL6qQyk" target="_blank" rel="noopener" data-cursor="Play">
+          <div class="card3d__inner">
+            <img src="/img/stream.webp" alt="Portada: Es Una Locura" loading="lazy" />
+            <div class="card3d__foil"></div>
+            <div class="tilt__glare"></div>
+          </div>
+          <div class="card3d__meta"><span>Single</span><h3>Es Una Locura</h3></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ NÚMEROS 1 ============ -->
+    <section class="hits">
+      <div class="hits__head">
+        <p class="kicker"><span class="kicker__line"></span>Billboard</p>
+        <h2 class="section-title"><span data-en="The">Los</span> <em data-en="Number Ones">Números Uno</em></h2>
+      </div>
+      <ol class="hits__list">
+        <li class="hit"><span class="hit__year">1996</span><span class="hit__title">Suave</span><span class="hit__album">Fresco</span><span class="hit__chart">#1 Tropical</span></li>
+        <li class="hit"><span class="hit__year">1996</span><span class="hit__title">Loco de Amor</span><span class="hit__album">Fresco</span><span class="hit__chart">#1 Tropical</span></li>
+        <li class="hit"><span class="hit__year">1996</span><span class="hit__title">Una y Mil Veces</span><span class="hit__album">Fresco</span><span class="hit__chart">#1 Tropical</span></li>
+        <li class="hit hit--gold"><span class="hit__year">1998</span><span class="hit__title">Ese</span><span class="hit__album">De Otra Manera</span><span class="hit__chart">#1 Hot Latin · #1 Tropical</span></li>
+        <li class="hit hit--gold"><span class="hit__year">2001</span><span class="hit__title">Quiero</span><span class="hit__album">Rivera</span><span class="hit__chart">#1 Hot Latin · Pop · Tropical</span></li>
+        <li class="hit"><span class="hit__year">2002</span><span class="hit__title">Vuela Muy Alto</span><span class="hit__album">Vuela Muy Alto</span><span class="hit__chart">#1 Tropical</span></li>
+        <li class="hit"><span class="hit__year">2003</span><span class="hit__title">Mi Libertad <small>ft. Voltio</small></span><span class="hit__album">Canto a Mi Ídolo…</span><span class="hit__chart">#1 Tropical</span></li>
+        <li class="hit"><span class="hit__year">2007</span><span class="hit__title">Cuesta Abajo</span><span class="hit__album">Caribe Gardel</span><span class="hit__chart">#1 Tropical</span></li>
+        <li class="hit"><span class="hit__year">2011</span><span class="hit__title">Solo Pienso En Ti</span><span class="hit__album">El Amor Existe</span><span class="hit__chart">#1 Tropical</span></li>
+        <li class="hit"><span class="hit__year">2011</span><span class="hit__title">Solo Con Un Beso</span><span class="hit__album">El Amor Existe</span><span class="hit__chart">#1 Tropical</span></li>
+      </ol>
+    </section>
+
+    <!-- ============ VIDEOS ============ -->
+    <section class="videos" id="videos">
+      <div class="videos__head">
+        <p class="kicker"><span class="kicker__line"></span>YouTube</p>
+        <h2 class="section-title"><span data-en="On">En</span> <em data-en="Screen">Pantalla</em></h2>
+      </div>
+      <div class="videos__grid">
+        <button class="vcard vcard--main tilt js-video" data-yt="YJesqqfNh7Y" type="button" data-cursor="Play">
+          <img src="/img/yt-YJesqqfNh7Y.webp" alt="" loading="lazy" />
+          <div class="tilt__glare"></div>
+          <span class="vcard__play" aria-hidden="true">▶</span>
+          <span class="vcard__meta"><small data-en="Official Visualizer">Visualizer Oficial</small><b>Mi Isla del Encanto</b></span>
+        </button>
+        <button class="vcard tilt js-video" data-yt="V6VIsglN150" type="button" data-cursor="Play">
+          <img src="/img/yt-V6VIsglN150.webp" alt="" loading="lazy" />
+          <div class="tilt__glare"></div>
+          <span class="vcard__play" aria-hidden="true">▶</span>
+          <span class="vcard__meta"><small>Video Lyric</small><b>Salsa es Destino y Rumbo</b></span>
+        </button>
+        <button class="vcard tilt js-video" data-yt="hotxxFfZmmo" type="button" data-cursor="Play">
+          <img src="/img/yt-hotxxFfZmmo.webp" alt="" loading="lazy" />
+          <div class="tilt__glare"></div>
+          <span class="vcard__play" aria-hidden="true">▶</span>
+          <span class="vcard__meta"><small data-en="Official Video">Video Oficial</small><b>Es Una Locura</b></span>
+        </button>
+      </div>
+      <a class="link-arrow" href="https://www.youtube.com/channel/UCa41eRZNUMi_6aO4u08FulA" target="_blank" rel="noopener"><span data-en="Full channel on YouTube">Canal completo en YouTube</span> ↗</a>
+    </section>
+
+    <!-- ============ TOUR ============ -->
+    <section class="tour" id="gira">
+      <div class="tour__bg" aria-hidden="true">EN VIVO</div>
+      <div class="ticket tilt">
+        <div class="ticket__main">
+          <p class="kicker"><span class="kicker__line"></span><span data-en="Next show">Próximo show</span></p>
+          <h2 class="ticket__city">Ciudad de México</h2>
+          <p class="ticket__venue">Auditorio Nacional</p>
+          <div class="countdown" aria-label="Cuenta regresiva">
+            <div><b class="js-cd-d">00</b><span data-en="days">días</span></div>
+            <div><b class="js-cd-h">00</b><span data-en="hrs">hrs</span></div>
+            <div><b class="js-cd-m">00</b><span>min</span></div>
+            <div><b class="js-cd-s">00</b><span>seg</span></div>
+          </div>
+          <p class="ticket__note" data-en="“Mexico, it won't be long now until I bring you all that boricua flavor 🇵🇷”">“¡México, ya falta poquito para llevarles todo el sabor boricua! 🇵🇷”</p>
+        </div>
+        <div class="ticket__stub">
+          <span class="ticket__date"><b>17</b>NOV<br />2026</span>
+          <a class="btn btn--gold magnetic" href="https://www.ticketmaster.com.mx/search?q=jerry%20rivera" target="_blank" rel="noopener"><span data-en="Tickets">Boletos</span><i class="btn__arrow">↗</i></a>
+          <span class="ticket__barcode" aria-hidden="true"></span>
+        </div>
+        <div class="tilt__glare"></div>
+      </div>
+      <p class="tour__more" data-en="Recently: Punta Cana 🇩🇴 · More dates coming soon — follow <a href='https://instagram.com/jerryrivera' target='_blank' rel='noopener'>@jerryrivera</a>">Recientemente: Punta Cana 🇩🇴 · Más fechas próximamente — sigue a <a href="https://instagram.com/jerryrivera" target="_blank" rel="noopener">@jerryrivera</a></p>
+    </section>
+
+    <!-- ============ INSTAGRAM ============ -->
+    <section class="social">
+      <div class="social__head">
+        <p class="kicker"><span class="kicker__line"></span>#LaVidaConJerry</p>
+        <h2 class="section-title"><span data-en="From">Desde</span> <em>Instagram</em></h2>
+        <a class="btn btn--ghost magnetic" href="https://instagram.com/jerryrivera" target="_blank" rel="noopener">@jerryrivera <i class="btn__arrow">↗</i></a>
+      </div>
+      <div class="social__rail">
+        <div class="social__track js-ig"></div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT / FOOTER ============ -->
+    <footer class="footer" id="contacto">
+      <div class="footer__big">
+        <span class="footer__script">¡Que viva</span>
+        <span class="footer__huge">La Salsa!</span>
+      </div>
+      <div class="footer__grid">
+        <form class="news" novalidate>
+          <label for="email" class="news__label" data-en="Join the family — news, releases and dates first.">Únete a la familia — noticias, lanzamientos y fechas primero.</label>
+          <div class="news__row">
+            <input id="email" type="email" placeholder="tu@email.com" autocomplete="email" required />
+            <button class="btn btn--gold magnetic" type="submit"><span data-en="Subscribe">Suscribirme</span></button>
+          </div>
+          <p class="news__msg" role="status"></p>
+        </form>
+        <div class="footer__col">
+          <h4 data-en="Booking & press">Contrataciones y prensa</h4>
+          <a href="https://linktr.ee/jerryriveraoficial" target="_blank" rel="noopener" data-en="Contact via official Linktree ↗">Contacto vía Linktree oficial ↗</a>
+        </div>
+        <div class="footer__col">
+          <h4 data-en="Follow">Síguelo</h4>
+          <div class="socials">
+            <a href="https://instagram.com/jerryrivera" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://tiktok.com/@jerryriveraofficial" target="_blank" rel="noopener">TikTok</a>
+            <a href="https://www.youtube.com/channel/UCa41eRZNUMi_6aO4u08FulA" target="_blank" rel="noopener">YouTube</a>
+            <a href="https://www.facebook.com/JerryRiveraFans/" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://open.spotify.com/artist/7wOZy3KdFVVINgNFFxkxwO" target="_blank" rel="noopener">Spotify</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 Jerry Rivera · <span data-en="All rights reserved">Todos los derechos reservados</span></span>
+        <a href="#top" class="to-top"><span data-en="Back to top">Volver arriba</span> ↑</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Video modal -->
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Video" aria-hidden="true">
+    <div class="modal__backdrop"></div>
+    <div class="modal__box">
+      <button class="modal__close" type="button" aria-label="Cerrar">×</button>
+      <div class="modal__frame"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
