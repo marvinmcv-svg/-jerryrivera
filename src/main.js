@@ -2,7 +2,10 @@ import './style.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { albums, posts, SHOW_DATE } from './data.js';
+import { albums, posts, hits, chapters, SHOW_DATE, art } from './data.js';
+import { media } from './media.js';
+import { previews } from './audio.js';
+import { initAssistant } from './assistant.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,8 +21,8 @@ const isMobile = () => window.innerWidth <= 720;
 let lang = 'es';
 const i18nNodes = $$('[data-en]').map((el) => ({ el, es: el.innerHTML, en: el.dataset.en }));
 const i18nExtra = {
-  es: { hits: 'Éxitos', studio: 'Álbum de estudio', thanks: '¡Gracias! Ya eres parte de la familia. 🎺', invalid: 'Escribe un email válido.', views: 'vistas' },
-  en: { hits: 'Hits', studio: 'Studio album', thanks: 'Thank you! You’re part of the family now. 🎺', invalid: 'Please enter a valid email.', views: 'views' },
+  es: { hits: 'Éxitos', studio: 'Álbum de estudio', thanks: '¡Gracias! Ya eres parte de la familia. 🎺', invalid: 'Escribe un email válido.', views: 'vistas', listen: 'Escuchar', side: 'Lado', flip: 'Dale la vuelta al disco', viewIg: 'Ver en Instagram', preview: 'Adelanto · 30 s', buy: 'Comprar', play: 'Reproducir adelanto de' },
+  en: { hits: 'Hits', studio: 'Studio album', thanks: 'Thank you! You’re part of the family now. 🎺', invalid: 'Please enter a valid email.', views: 'views', listen: 'Listen', side: 'Side', flip: 'Flip the record', viewIg: 'View on Instagram', preview: 'Preview · 30 s', buy: 'Buy', play: 'Play preview of' },
 };
 const t = (k) => i18nExtra[lang][k];
 
@@ -32,7 +35,10 @@ function setLang(next) {
   splitWords($('.js-words'));
   buildLegacyScrub();
   renderPosts();
+  renderTracks();
+  renderHits();
   updateDiscoInfo(activeAlbum, true);
+  assistant?.relang();
   ScrollTrigger.refresh();
 }
 $('.lang').addEventListener('click', () => setLang(lang === 'es' ? 'en' : 'es'));
@@ -298,38 +304,17 @@ function initScroll() {
   // stats stagger
   gsap.from('.stat', { y: 40, autoAlpha: 0, stagger: 0.12, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.stats', start: 'top 85%' } });
 
-  // horizontal story
-  const track = $('.story__track');
-  const dist = () => track.scrollWidth - window.innerWidth;
-  const storyTween = gsap.to(track, {
-    x: () => -dist(), ease: 'none',
-    scrollTrigger: {
-      trigger: '.story', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true,
-      onUpdate: (s) => gsap.set('.story__progress span', { scaleX: s.progress }),
-    },
-  });
-  $$('.chapter').forEach((ch) => {
-    gsap.from(ch, {
-      y: 90, rotate: 4, autoAlpha: 0.2, ease: 'power2.out',
-      scrollTrigger: { trigger: ch, containerAnimation: storyTween, start: 'left 95%', end: 'left 60%', scrub: true },
-    });
-    gsap.from($('.chapter__year', ch), {
-      xPercent: 30, ease: 'none',
-      scrollTrigger: { trigger: ch, containerAnimation: storyTween, start: 'left right', end: 'right left', scrub: true },
-    });
-  });
-
   // singles: cards rise with a 3D flip
   gsap.from('.card3d', { y: 120, rotateX: 25, autoAlpha: 0, stagger: 0.15, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.singles__grid', start: 'top 85%' } });
 
-  // hits list
-  gsap.from('.hit', { y: 40, autoAlpha: 0, stagger: 0.06, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.hits__list', start: 'top 85%' } });
 
   // videos
   gsap.from('.vcard', { y: 100, rotateY: -12, autoAlpha: 0, stagger: 0.15, duration: 1.5, ease: 'expo.out', scrollTrigger: { trigger: '.videos__grid', start: 'top 85%' } });
 
   // ticket flips in
   gsap.from('.ticket', { rotateX: 50, y: 120, autoAlpha: 0, duration: 1.8, ease: 'expo.out', scrollTrigger: { trigger: '.tour', start: 'top 75%' } });
+  gsap.fromTo('.tour__photo img', { yPercent: -8, scale: 1.12 }, { yPercent: 8, scale: 1.02, ease: 'none', scrollTrigger: { trigger: '.tour', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('.tour__intro > *', { y: 50, autoAlpha: 0, stagger: 0.1, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.tour', start: 'top 70%' } });
   gsap.fromTo('.tour__bg', { xPercent: -40 }, { xPercent: -60, ease: 'none', scrollTrigger: { trigger: '.tour', start: 'top bottom', end: 'bottom top', scrub: true } });
 
   // footer big type
@@ -369,14 +354,27 @@ let radius = 0;
 let activeAlbum = 0;
 let ringAngle = 0;
 
-function sleeveMarkup(a) {
-  if (a.cover) return `<img src="${a.cover}" alt="Portada: ${a.name}" loading="lazy" />`;
-  return `<div class="sleeve-art sleeve-art--${a.pattern}" style="--h:${a.hue}">
+const PATTERNS = ['rings', 'sun', 'foil', 'stripes', 'dots'];
+function sleeveFallback(a, i) {
+  return `<div class="sleeve-art sleeve-art--${PATTERNS[i % PATTERNS.length]}" style="--h:${(i * 47 + 352) % 360}">
       <div class="sleeve-art__top"><span>${a.year}</span><span>${a.star ? '★' : '◆'}</span></div>
       <div class="sleeve-art__title">${a.name}</div>
       <div class="sleeve-art__artist">Jerry Rivera</div>
     </div>`;
 }
+function sleeveMarkup(a, i, eager) {
+  const src = a.local || media(art(a.key, isMobile() ? 600 : 1200));
+  return `<img src="${src}" alt="Portada: ${a.name} (${a.year})" ${eager ? '' : 'loading="lazy"'} decoding="async" data-fallback="${i}" />`;
+}
+// Any cover that fails to load is swapped for a designed typographic sleeve.
+document.addEventListener('error', (e) => {
+  const img = e.target;
+  if (!(img instanceof HTMLImageElement) || img.dataset.failed) return;
+  if (img.dataset.fallback == null) { img.dataset.failed = '1'; img.classList.add('is-broken'); return; }
+  img.dataset.failed = '1';
+  const i = +img.dataset.fallback;
+  img.outerHTML = sleeveFallback(albums[i], i);
+}, true);
 albums.forEach((a, i) => {
   const card = document.createElement('div');
   card.className = 'rcard';
@@ -384,7 +382,7 @@ albums.forEach((a, i) => {
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
   card.setAttribute('aria-label', `${a.name} (${a.year})`);
-  card.innerHTML = `<div class="rcard__face">${sleeveMarkup(a)}</div><div class="rcard__reflect"><div class="rcard__face">${sleeveMarkup(a)}</div></div>`;
+  card.innerHTML = `<div class="rcard__face">${sleeveMarkup(a, i, i < 3)}</div><div class="rcard__reflect"><div class="rcard__face">${sleeveMarkup(a, i)}</div></div>`;
   card.addEventListener('click', () => goToAlbum(i));
   card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToAlbum(i); } });
   ring.appendChild(card);
@@ -393,7 +391,7 @@ const rcards = $$('.rcard', ring);
 $('.js-d-total').textContent = String(N).padStart(2, '0');
 
 function layoutRing() {
-  const w = isMobile() ? 190 : window.innerWidth < 1024 ? 240 : 300;
+  const w = isMobile() ? Math.round(Math.min(190, window.innerHeight * 0.22)) : window.innerWidth < 1024 ? 240 : 300;
   ring.style.setProperty('--card', w + 'px');
   radius = Math.round((w / 2) / Math.tan(Math.PI / N) * 1.05);
   rcards.forEach((c, i) => (c.style.transform = `rotateY(${i * STEP}deg) translateZ(${radius}px)`));
@@ -422,6 +420,11 @@ function updateDiscoInfo(i, force) {
     $('.js-d-label').textContent = a.label;
     $('.js-d-idx').textContent = String(i + 1).padStart(2, '0');
     $('.js-d-hits').innerHTML = (a.hits.length ? a.hits : [t('studio')]).map((h) => `<li>${h}</li>`).join('');
+    $('.js-d-links').innerHTML = [
+      a.spotify && `<a href="${a.spotify}" target="_blank" rel="noopener">Spotify ↗</a>`,
+      a.apple && `<a href="${a.apple}" target="_blank" rel="noopener">Apple Music ↗</a>`,
+      a.apple && `<a href="${a.apple}" target="_blank" rel="noopener" class="is-buy">${t('buy')} ↗</a>`,
+    ].filter(Boolean).join('');
   };
   if (reduced || force) return fill();
   gsap.timeline()
@@ -586,18 +589,40 @@ window.addEventListener('keydown', (e) => {
    Instagram rail
    ========================================================= */
 const compact = (n) => (n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K' : n);
+// Each card is Instagram's official embed markup (real photo/video, caption and likes).
+// Until embed.js upgrades it — or if Instagram is blocked — our styled fallback shows.
 function renderPosts() {
   const locale = lang === 'en' ? 'en-US' : 'es-PR';
   $('.js-ig').innerHTML = posts.map((p) => {
     const d = new Date(p.date + 'T12:00:00').toLocaleDateString(locale, { day: 'numeric', month: 'short' });
-    return `<a class="post" href="${p.url}" target="_blank" rel="noopener" data-cursor="IG ↗">
-      <div class="post__top"><span class="post__tag">${p.tag}</span><span>${d}</span></div>
-      <p class="post__text">${p.text}</p>
-      <div class="post__stats"><span>♥ <b>${compact(p.likes)}</b></span><span>💬 <b>${compact(p.comments)}</b></span>${p.views ? `<span>▶ <b>${compact(p.views)}</b> ${t('views')}</span>` : ''}</div>
-    </a>`;
+    return `<article class="post">
+      <div class="post__top"><span class="post__tag">${p.tag}</span><span>${d}</span><span class="post__stats">♥ <b>${compact(p.likes)}</b>${p.views ? ` · ▶ <b>${compact(p.views)}</b>` : ''}</span></div>
+      <div class="post__embed">
+        <blockquote class="instagram-media" data-instgrm-permalink="${p.url}?utm_source=ig_embed" data-instgrm-version="14">
+          <a class="post__fallback" href="${p.url}" target="_blank" rel="noopener">
+            <span class="post__ig"><img src="/img/jr-face.webp" alt="" width="34" height="34" /><b>jerryrivera</b><small>✓</small></span>
+            <span class="post__text">${p.text}</span>
+            <span class="post__cta">${t('viewIg')} ↗</span>
+          </a>
+        </blockquote>
+      </div>
+    </article>`;
   }).join('');
+  if (window.instgrm) window.instgrm.Embeds.process();
 }
 renderPosts();
+ScrollTrigger.create({
+  trigger: '.social', start: 'top 160%', once: true,
+  onEnter: () => {
+    const sc = document.createElement('script');
+    sc.async = true;
+    sc.src = 'https://www.instagram.com/embed.js';
+    sc.onload = () => window.instgrm?.Embeds.process();
+    document.body.appendChild(sc);
+  },
+});
+$('.js-ig-prev').addEventListener('click', () => $('.social__rail').scrollBy({ left: -360, behavior: 'smooth' }));
+$('.js-ig-next').addEventListener('click', () => $('.social__rail').scrollBy({ left: 360, behavior: 'smooth' }));
 
 // drag-to-scroll for the rail (mouse); touch uses native scroll
 (function dragRail() {
@@ -636,10 +661,141 @@ $('.news').addEventListener('submit', (e) => {
 });
 
 /* =========================================================
+   HISTORIA — "Lado A / Lado B" turntable
+   ========================================================= */
+const SPOTIFY_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22Zm5.04 15.87a.69.69 0 0 1-.95.23c-2.6-1.59-5.87-1.95-9.73-1.07a.69.69 0 1 1-.3-1.34c4.22-.96 7.85-.55 10.75 1.23.33.2.43.63.23.95Zm1.35-3a.86.86 0 0 1-1.18.28c-2.97-1.83-7.5-2.36-11.02-1.29a.86.86 0 1 1-.5-1.64c4.02-1.22 9.02-.63 12.42 1.47.4.25.53.78.28 1.18Zm.12-3.12C14.95 8.63 9.07 8.43 5.67 9.46a1.03 1.03 0 1 1-.6-1.97c3.9-1.18 10.4-.95 14.5 1.48a1.03 1.03 0 0 1-1.06 1.78Z"/></svg>';
+const chapterImg = (c, size = 600) => c.local || (c.cover ? media(art(c.cover, size)) : c.img);
+let activeChapter = 0;
+let storyIO = null;
+
+function renderTracks() {
+  const L = lang;
+  let side = null;
+  $('.js-tracks').innerHTML = chapters.map((c, i) => {
+    const divider = c.side !== side
+      ? `<li class="side-break" aria-hidden="true"><span>${t('side')} ${c.side}</span>${side ? `<em>${t('flip')} ↻</em>` : ''}</li>`
+      : '';
+    side = c.side;
+    const play = c.preview
+      ? `<button class="play-chip" type="button" data-preview="${c.preview}" data-title="${c.songTitle}" data-sub="${c.year} · ${c.title[L].replace(/"/g, '')}" data-art="${chapterImg(c, 300)}" aria-label="${t('play')} ${c.songTitle}">
+           <span class="play-chip__icon" aria-hidden="true"><b class="i-play">▶</b><b class="i-pause">❚❚</b></span>
+           <span class="play-chip__txt"><small>${t('listen')} · ${c.year}</small>${c.songTitle}</span>
+           <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+           <span class="play-chip__bar" aria-hidden="true"></span>
+         </button>`
+      : '';
+    return `${divider}<li class="track${c.big ? ' track--big' : ''}${c.now ? ' track--now' : ''}" data-i="${i}">
+      <div class="track__no">${c.side}${c.n}</div>
+      <div class="track__body">
+        <p class="track__meta"><span class="track__year">${c.year}</span><span class="track__place">${c.place}</span></p>
+        <h3 class="track__title">${c.title[L]}</h3>
+        <p class="track__text">${c.text[L]}</p>
+        ${c.quote ? `<blockquote class="track__quote">${c.quote[L]}</blockquote>` : ''}
+        ${c.stat ? `<p class="track__stat">★ ${c.stat[L]}</p>` : ''}
+        <div class="track__foot">
+          <img class="track__cover" src="${chapterImg(c, 300)}" alt="" loading="lazy" width="64" height="64" />
+          ${play}
+        </div>
+      </div>
+    </li>`;
+  }).join('');
+  observeTracks();
+  setDeck(activeChapter, true);
+}
+
+function setDeck(i, instant) {
+  const c = chapters[i];
+  if (!c) return;
+  const changed = i !== activeChapter;
+  activeChapter = i;
+  $$('.track').forEach((el) => el.classList.toggle('is-active', +el.dataset.i === i));
+  const img = $('.js-tt-img');
+  const fill = () => {
+    img.src = chapterImg(c, 600);
+    $('.js-deck-year').textContent = c.year;
+    $('.js-deck-side').textContent = `${t('side')} ${c.side} · ${c.n}`;
+    $('.js-deck-title').textContent = c.title[lang];
+  };
+  const p = i / (chapters.length - 1);
+  $('.js-tt-arm').style.setProperty('--arm', (p * 24).toFixed(2) + 'deg');
+  $('.js-deck-fill').style.transform = `scaleX(${p})`;
+  $('.js-tt').classList.toggle('is-side-b', c.side === 'B');
+  if (instant || reduced || !changed) return fill();
+  gsap.timeline()
+    .to('.tt__label', { rotateY: 90, duration: 0.18, ease: 'power2.in', onComplete: fill })
+    .to('.tt__label', { rotateY: 0, duration: 0.45, ease: 'back.out(2)' });
+  gsap.fromTo('.js-deck-year', { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, ease: 'expo.out' });
+}
+
+function observeTracks() {
+  storyIO?.disconnect();
+  storyIO = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) setDeck(+en.target.dataset.i); });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  $$('.track').forEach((el) => storyIO.observe(el));
+}
+
+function initStory() {
+  renderTracks();
+  // The turntable spins while a story preview plays; tap it to play/pause the active era.
+  previews.onChange(({ id, playing }) => {
+    const isStory = chapters.some((c) => c.preview === id);
+    $('.js-tt').classList.toggle('is-playing', playing && isStory);
+  });
+  $('.js-tt').addEventListener('click', () => {
+    const btn = $(`.track[data-i="${activeChapter}"] [data-preview]`);
+    if (btn) btn.click();
+  });
+  if (reduced) return;
+  gsap.to('.js-tt-record', { rotate: 540, ease: 'none', scrollTrigger: { trigger: '.story__body', start: 'top bottom', end: 'bottom top', scrub: 0.6 } });
+  gsap.from('.turntable', { y: 80, rotate: -8, autoAlpha: 0, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.story__body', start: 'top 80%' } });
+}
+
+/* =========================================================
+   LOS NÚMEROS UNO — tap to preview, open on Spotify
+   ========================================================= */
+function renderHits() {
+  $('.js-hits').innerHTML = hits.map((h, i) => `
+    <li class="hit${h.gold ? ' hit--gold' : ''}">
+      <button class="hit__play" type="button" data-preview="${h.preview}" data-title="${h.title}${h.feat ? ' ' + h.feat : ''}" data-sub="${h.year} · ${h.album} · ${h.chart}" data-art="${media(art(h.cover, 300))}" data-spotify="${h.spotifyUrl}" aria-label="${t('play')} ${h.title}">
+        <img src="${media(art(h.cover, 300))}" alt="" loading="lazy" width="56" height="56" />
+        <svg class="hit__ring" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" pathLength="1" /></svg>
+        <span class="hit__icon" aria-hidden="true"><b class="i-play">▶</b><b class="i-pause">❚❚</b></span>
+      </button>
+      <span class="hit__rank">${String(i + 1).padStart(2, '0')}</span>
+      <span class="hit__year">${h.year}</span>
+      <span class="hit__title">${h.title}${h.feat ? ` <small>${h.feat}</small>` : ''}<span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span>
+      <span class="hit__album">${h.album}</span>
+      <span class="hit__chart">${h.chart}</span>
+      <a class="hit__spotify" href="${h.spotifyUrl}" target="_blank" rel="noopener" aria-label="Spotify: ${h.title}">${SPOTIFY_SVG}<span>Spotify</span></a>
+    </li>`).join('');
+}
+function initHits() {
+  renderHits();
+  $('.js-hits').addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) return;
+    e.target.closest('.hit')?.querySelector('.hit__play')?.click();
+  });
+  if (!reduced) gsap.from('.hit', { y: 40, autoAlpha: 0, stagger: 0.06, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.hits__list', start: 'top 85%' } });
+}
+
+/* =========================================================
+   JR AI
+   ========================================================= */
+let assistant = null;
+
+/* =========================================================
    Boot
    ========================================================= */
-initScroll();   // story pin must be created before the disco pin (page order)
+initStory();
+initHits();
+initScroll();
 initDisco();
+assistant = initAssistant({
+  getLang: () => lang,
+  onOpen: () => { if (isMobile()) lenis?.stop(); },
+  onClose: () => { if (!menuOpen) lenis?.start(); },
+});
 ScrollTrigger.sort();
 initTilt();
 initMagnetic();
